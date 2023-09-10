@@ -30,16 +30,9 @@ public class XmlNodeManager {
 
     }
 
-    private void setChildren(XmlNode node) {
-        for (XmlNode child : this.nodes) {
-            if (Objects.equals(child.Parent, node.Id))
-                node.children.add(child);
-        }
-    }
 
-    private void setRoot() throws Exception {
-        this.root = getNodeByParentId(-1L);
-    }
+
+
 
     private void updateNodes() throws Exception {
         for (XmlNode node : this.nodes) {
