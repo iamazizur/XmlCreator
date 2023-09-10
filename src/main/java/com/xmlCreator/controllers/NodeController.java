@@ -6,14 +6,9 @@ import com.xmlCreator.models.XmlNode;
 import com.xmlCreator.models.XmlNodeDTO;
 import com.xmlCreator.services.NodeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "api/v1/nodes")
@@ -45,19 +40,28 @@ public class NodeController {
         return root;
     }
 
-    @GetMapping(path = "getsortednodes")
-    public List<XmlNode> getSortedNodes(){
-        Iterable<XmlNodeDTO> dtos = getNodes();
-        Iterator<XmlNodeDTO> iterator = dtos.iterator();
-        List<XmlNode> nodes = new ArrayList<>();
-        while (iterator.hasNext()){
-            nodes.add(XmlNodeMapper.mapToXmlNode(iterator.next()));
-        }
 
-        nodes.sort(Comparator.comparingInt(node -> node.Parent.intValue()));
-        return nodes;
+
+
+    @PostMapping(path = "setData")
+    public String[] setData(@RequestBody Getter value){
+
+        Optional<XmlNodeDTO> dto = this.service.findById(value.nodeId );
+        XmlNode node =
+                XmlNodeMapper.mapToXmlNode(dto.get());
+
+        Class<?> cl1 = value.nodeId.getClass();
+        Class<?> cl2 = value.value.getClass();
+        System.out.println(value.nodeId.getClass());
+        return new String[]{
+                value.nodeId.getClass().toString(),
+                value.value.getClass().toString(),
+                node.toString()
+        };
     }
 
-
-
+}
+class Getter{
+    public Integer nodeId;
+    public Object value;
 }
